@@ -1,3 +1,6 @@
+https://docs.microsoft.com/en-us/azure/machine-learning/tutorial-train-models-with-aml
+
+
 1. From Azure portal create a resource 'Machine Learning'. Login to ml.azure.com. Use the notebook option to create notebook.
 
 from azureml.core import Workspace
