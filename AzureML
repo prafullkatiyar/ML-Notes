@@ -44,3 +44,28 @@ For each alpha hyperparameter value in the alphas array, a new run is created wi
 In each run, a Ridge model is instantiated, trained, and used to run predictions. The root-mean-squared-error is calculated for the actual versus predicted values, and then logged to the run. At this point the run has metadata attached for both the alpha value and the rmse accuracy.
 Next, the model for each run is serialized and uploaded to the run. This allows you to download the model file from the run in the studio.
 At the end of each iteration the run is completed by calling run.complete().
+
+minimum_rmse_runid = None
+minimum_rmse = None
+
+for run in experiment.get_runs():
+    run_metrics = run.get_metrics()
+    run_details = run.get_details()
+    # each logged metric becomes a key in this returned dict
+    run_rmse = run_metrics["rmse"]
+    run_id = run_details["runId"]
+
+    if minimum_rmse is None:
+        minimum_rmse = run_rmse
+        minimum_rmse_runid = run_id
+    else:
+        if run_rmse < minimum_rmse:
+            minimum_rmse = run_rmse
+            minimum_rmse_runid = run_id
+
+print("Best run_id: " + minimum_rmse_runid)
+print("Best run_id rmse: " + str(minimum_rmse))
+
+In addition to being able to download model files from the experiment in the studio, you can also download them programmatically. 
+The following code iterates through each run in the experiment, and accesses both the logged run metrics and the run details (which contains the run_id). 
+This keeps track of the best run, in this case the run with the lowest root-mean-squared-error.
